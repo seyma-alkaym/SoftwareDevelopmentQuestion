@@ -63,9 +63,9 @@ Clone the repository.
 
 ## Getting Started with Frontend
 
-1. Navigate to the `user-mangement-app` directory:
+1. Navigate to the `user-mangement-client` directory:
     ```bash
-    cd user-mangement-app
+    cd user-mangement-client
     ```
 
 2. Install dependencies:
