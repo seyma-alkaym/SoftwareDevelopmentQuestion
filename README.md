@@ -45,7 +45,7 @@ This project is a user management system that allows users to perform CRUD (Crea
 
 - `backend/`: Contains the Go backend code.
 - `frontend/`: Contains the TypeScript, React, and Next.js frontend code.
-- `database.db`: SQLite database file.
+- `appDB.db`: SQLite database file.
 
 ## Getting Started
 

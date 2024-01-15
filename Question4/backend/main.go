@@ -36,8 +36,8 @@ func main() {
 	router.HandleFunc("/users", GetUsers).Methods("GET")
 	router.HandleFunc("/users/{id:[0-9]+}", GetUser).Methods("GET")
 	router.HandleFunc("/users", CreateUser).Methods("POST")
-	router.HandleFunc("/users/{id:[0-9]+}", UpdateUser).Methods("PUT")
-	router.HandleFunc("/users/{id:[0-9]+}", DeleteUser).Methods("DELETE")
+	router.HandleFunc("/user-update/{id:[0-9]+}", UpdateUser).Methods("PUT")
+	router.HandleFunc("/user-delete/{id:[0-9]+}", DeleteUser).Methods("DELETE")
 
 	fmt.Println("Server is running on :8080...")
 	log.Fatal(http.ListenAndServe(":8080", router))

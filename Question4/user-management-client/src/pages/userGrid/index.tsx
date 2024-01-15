@@ -1,15 +1,20 @@
-import React from 'react';
-import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import User from '../model/user';
+import UserDetail from '../userDetail';
 
 const UserGrid: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
+  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+
+  const [isSelected, setIsSelected] = useState(false);
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const response = await fetch('http://localhost:8080/users');
+        if (!response.ok) {
+          throw new Error('Failed to fetch users.');
+        }
         const data = await response.json();
         setUsers(data);
       } catch (error) {
@@ -20,23 +25,9 @@ const UserGrid: React.FC = () => {
     fetchUsers();
   }, []);
 
-  const handleDelete = async (userId: number) => {
-    try {
-      const response = await fetch(`api/users/${userId}`, {
-        method: 'DELETE',
-      });
-  
-      if (response.ok) {
-        console.log('User deleted successfully.');
-      } else {
-        console.error('Failed to delete user.');
-      }
-    } catch (error) {
-      console.error('Error deleting user:', error);
-    }
-  };
-  
-
+  if (!Array.isArray(users)) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <div>
@@ -52,29 +43,34 @@ const UserGrid: React.FC = () => {
         <tbody>
           {users.map((user) => (
             <tr key={user.id}>
+              <td>{user.firstname}</td>
+              <td>{user.lastname}</td>
+              <td>{user.email}</td>
               <td>
-                  {user.firstname}
-              </td>
-              <td>
-                  {user.lastname}
-              </td>
-              <td>
-                  {user.email}
-              </td>
-              <td>
-                <Link href={`/user/${user.id}/edit`}>
-                  Edit
-                </Link>{' '}
-                |
-                <button onClick={() => handleDelete(user.id)}>Delete</button>
+                <div className="flex items-start mb-5">
+                  <div className="flex items-center h-5">
+                    <input 
+                      id="terms" 
+                      type="checkbox" 
+                      value="" 
+                      disabled = {isSelected}
+                      className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800" 
+                      onChange={
+                        () => {
+                          setSelectedUserId(user.id);
+                          setIsSelected(true);
+                        }
+                      } 
+                    />
+                  </div>
+                </div>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      <Link href="/user/new">
-        New
-      </Link>
+
+      {selectedUserId && <UserDetail id={selectedUserId} />}
     </div>
   );
 };
